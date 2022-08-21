@@ -1,3 +1,6 @@
-impl CPU {
+struct CPU {
     
+}
+
+impl CPU {
 }
