@@ -1,6 +1,5 @@
-struct CPU {
-    
-}
-
 impl CPU {
+    mod add {
+        use super::*;
+    }
 }
