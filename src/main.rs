@@ -10,9 +10,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 mod cpu;
 use cpu::Cpu;
 
+
 fn main() {
     println!("Hello, world!");
     let mut _cpu = Cpu::new();
-    _cpu.load_program(vec![1,2,3,4,2]);
+    _cpu.load_program(vec![1,2,3,8,2,0]);
     _cpu.run();
+    _cpu.print_debug_info();
 }
