@@ -14,6 +14,7 @@ use cpu::Cpu;
 fn main() {
     // println!("Hello, world!");
     let mut _cpu = Cpu::new();
+    //就输出了一个hello，也太长了吧
     _cpu.load_program(vec![
         1,1,'h' as u8,8,1,0,
         1,2,'e' as u8,8,2,0,

@@ -8,6 +8,8 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 #[derive(Debug)]
+
+//指令：操作码与它的两个参数
 pub struct Instruction{
     pub opcode: u8,
     pub arg: u8,
@@ -19,7 +21,7 @@ pub struct Cpu {
     pub sp: u64, //栈顶端的地址
     pub mem: [u8; 256], //内存
     pub regs: [u8; 256], //寄存器组
-    pub flags: [u8; 4],
+    pub flags: [u8; 4], //CPU也要立flag（雾
     /*
     flags:
     0：为0则计算出是0，为1则计算出大于零，为2则计算出的小于零
@@ -31,16 +33,17 @@ pub struct Cpu {
 impl Cpu {
     pub fn new() -> Self {
         Cpu {
-            pc: 0,
-            ir: Instruction { opcode: 0, arg: 0, arg2: 0},
-            sp: 0,
-            mem: [0; 256],
-            regs: [0; 256],
-            flags: [0; 4],
+            pc: 0, //刚开始肯定从零开始
+            ir: Instruction { opcode: 0, arg: 0, arg2: 0}, //awa
+            sp: 0, //内存结构还没写好，先暂时为0
+            mem: [0; 256], //一丁点大的内存
+            regs: [0; 256], //比太阳还大的寄存器组
+            flags: [0; 4], //这flag一个都没完成呢（
         }
     }
     //传入一个指令的数组，加载到内存中
     pub fn load_program(self: &mut Cpu,_program: Vec<u8>){
+        //直接拷贝，编译器给的提示
         self.mem[.._program.len()].copy_from_slice(&_program[..]);
     }
     pub fn run(self: &mut Cpu) {
@@ -82,11 +85,14 @@ impl Cpu {
                     print!("{}",(self.regs[self.ir.arg as usize] as char));
                 }
                 _ => {
+                    //MCODE：这什么鬼指令？？？
                     println!("unknown instruction:{:#?}",self.ir);
                 }
             }
         }
     }
+
+    //CPU，让我看看你正不正常
     pub fn print_debug_info(self: &mut Cpu){
         println!("PC:{} ",self.pc);
         println!("instruction reg:{:#?}",self.ir);
