@@ -45,14 +45,14 @@ impl Cpu {
     }
     pub fn run(self: &mut Cpu) {
         loop {
-            //PC++
-            self.pc = self.pc.wrapping_add(3);
             //解析指令
             self.ir = Instruction{
                 opcode: self.mem[self.pc],
                 arg: self.mem[self.pc+1],
                 arg2: self.mem[self.pc+2],
             };
+            //PC++
+            self.pc = self.pc.wrapping_add(3);
             match self.ir.opcode {
                 0x0 => break, //退出程序
                 0x1 => { //赋值加法
@@ -72,11 +72,11 @@ impl Cpu {
                 }
                 0x6 => { //条件跳转
                     if self.flags[0] == 0 {
-                        self.pc = (self.ir.arg <<8 + self.ir.arg2) as usize;
+                        self.pc = (((self.ir.arg as u64) <<8) + (self.ir.arg2 as u64)) as usize;
                     }
                 }
                 0x7 => { //直接跳转
-                    self.pc = (self.ir.arg <<8 + self.ir.arg2) as usize;
+                    self.pc = (((self.ir.arg as u64) <<8) + (self.ir.arg2 as u64)) as usize;
                 }
                 0x8 => { //输出
                     print!("{}",(self.regs[self.ir.arg as usize] as char));

@@ -12,9 +12,15 @@ use cpu::Cpu;
 
 
 fn main() {
-    println!("Hello, world!");
+    // println!("Hello, world!");
     let mut _cpu = Cpu::new();
-    _cpu.load_program(vec![1,2,3,8,2,0]);
+    _cpu.load_program(vec![
+        1,1,'h' as u8,8,1,0,
+        1,2,'e' as u8,8,2,0,
+        1,3,'l' as u8,8,3,0,
+        1,4,'l' as u8,8,4,0,
+        1,5,'o' as u8,8,5,0,
+        ]);
     _cpu.run();
-    _cpu.print_debug_info();
+    // _cpu.print_debug_info();
 }
