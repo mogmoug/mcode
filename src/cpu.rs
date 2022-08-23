@@ -11,8 +11,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-#[derive(Debug)]
 
+use std::io;
+
+#[derive(Debug)]
 //指令：操作码与它的两个参数
 pub struct Instruction {
     pub opcode: u8,
@@ -163,6 +165,12 @@ impl Cpu {
                     //输出
                     print!("{}", (self.regs[self.ir.arg as usize] as char));
                 }
+                0x9 => {
+                    //输入
+                    let mut buf = String::new();
+                    io::stdin().read_line(&mut buf).expect("IO Error");
+                    self.regs[self.ir.arg as usize] = buf.as_bytes()[0];
+                }
                 _ => {
                     //MCODE：这什么鬼指令？？？
                     println!("unknown instruction:{:#?}", self.ir);
@@ -171,7 +179,7 @@ impl Cpu {
         }
     }
 
-    //CPU，让我看看你正不正常
+    //一键查看CPU的状况
     pub fn print_debug_info(self: &mut Cpu) {
         println!("PC:{} ", self.pc);
         println!("instruction reg:{:#?}", self.ir);
