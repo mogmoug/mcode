@@ -26,6 +26,15 @@ fn main() {
         1,5,'o' as u8,8,5,0,
         ]);
     _cpu.run();
-    _cpu.print_debug_info();
-      
+    if 1==0 {
+      {
+        let this = _cpu;
+        println!("PC:{} ", this.pc);
+        println!("instruction reg:{:#?}", this.ir);
+        println!("SP:{}", this.sp);
+        println!("mem:{:?}", this.mem);
+        println!("regs:{:?}", this.regs);
+        println!("flags:{:?}", this.flags);
+    };
+    }
 }
