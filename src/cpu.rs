@@ -45,7 +45,7 @@ impl Cpu {
                 arg: 0,
                 arg2: 0,
             }, //awa
-            sp: 0, //内存结构还没写好，先暂时为0
+            sp: 0, //暂时为0
             mem: [0; 65535], //一丁点大的内存
             regs: [0; 32], //比太阳还大的寄存器组
             flags: [0; 4], //这flag一个都没完成呢（
@@ -53,7 +53,7 @@ impl Cpu {
     }
     //传入一个指令的数组，加载到内存中
     pub fn load_program(self: &mut Cpu, _program: Vec<u8>) {
-        //直接拷贝，编译器给的提示
+        //直接拷贝
         self.mem[.._program.len()].copy_from_slice(&_program[..]);
     }
     pub fn run(self: &mut Cpu) {
