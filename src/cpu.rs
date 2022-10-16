@@ -171,6 +171,22 @@ impl Cpu {
                     io::stdin().read_line(&mut buf).expect("IO Error");
                     self.regs[self.ir.arg as usize] = buf.as_bytes()[0];
                 }
+                0x10 => {
+                    //写入内存
+
+                }
+                0x11 => {
+                    //读内存
+
+                }
+                0x12 => {
+                    //调用
+
+                }
+                0x13 => {
+                    //返回
+                    
+                }
                 _ => {
                     //MCODE：这什么鬼指令？？？
                     println!("unknown instruction:{:#?}", self.ir);
