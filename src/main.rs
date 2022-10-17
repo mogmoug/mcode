@@ -14,27 +14,25 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 mod cpu;
 use cpu::Cpu;
 
-
 fn main() {
     let mut _cpu = Cpu::new();
     //就输出了一个hello，也太长了吧
     _cpu.load_program(vec![
-        1,1,'h' as u8,8,1,0,
-        1,2,'e' as u8,8,2,0,
-        1,3,'l' as u8,8,3,0,
-        1,4,'l' as u8,8,4,0,
-        1,5,'o' as u8,8,5,0,
-        ]);
+        1, 1, 'h' as u8, //写入h
+        8, 1, 0, //输出
+        1, 2, 'e' as u8, //写入e
+        8, 2, 0, //输出
+        1, 3, 'l' as u8, //写入l
+        8, 3, 0, //输出
+        1, 4, 'l' as u8, //写入l
+        8, 4, 0, //输出
+        1, 5, 'o' as u8, //写入o
+        8, 5, 0, //输出
+    ]);
     _cpu.run();
-    if 1==0 {
-      {
-        let this = _cpu;
-        println!("PC:{} ", this.pc);
-        println!("instruction reg:{:#?}", this.ir);
-        println!("SP:{}", this.sp);
-        println!("mem:{:?}", this.mem);
-        println!("regs:{:?}", this.regs);
-        println!("flags:{:?}", this.flags);
-    };
+    if 1 == 0 {
+        {
+            _cpu.print_debug_info();
+        };
     }
 }

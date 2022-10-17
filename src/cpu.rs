@@ -15,6 +15,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 use std::io;
 
 #[derive(Debug)]
+#[warn(unused_comparisons)]
 //指令：操作码与它的两个参数
 pub struct Instruction {
     pub opcode: u8,
@@ -24,7 +25,8 @@ pub struct Instruction {
 pub struct Cpu {
     pub pc: usize,        //程序计数器
     pub ir: Instruction,  //指令寄存器
-    pub sp: u64,          //栈顶端的地址
+    pub stack_down: usize,
+    pub stack_top: u64,          //栈顶端的地址
     pub mem: [u8; 65535], //内存
     pub regs: [u8; 32],   //寄存器组
     pub flags: [u8; 4],   //CPU也要立flag（雾
@@ -45,7 +47,8 @@ impl Cpu {
                 arg: 0,
                 arg2: 0,
             }, //awa
-            sp: 0, //暂时为0
+            stack_down: 256,
+            stack_top: 256, //暂时为0
             mem: [0; 65535], //一丁点大的内存
             regs: [0; 32], //比太阳还大的寄存器组
             flags: [0; 4], //这flag一个都没完成呢（
@@ -74,12 +77,32 @@ impl Cpu {
                     match u8::checked_add(self.regs[self.ir.arg as usize], self.ir.arg2) {
                         Some(x) => {
                             self.regs[self.ir.arg as usize] = x;
+                            //判断正负零
+                            if x == 0 {
+                                self.flags[0] = 0;
+                            }
+                            if x > 0 {
+                                self.flags[0] = 1;
+                            }
+                            if x < (0 as u8) {
+                                self.flags[0] = 2;
+                            }
                             //如果没有溢出
                         }
                         None => {
                             self.regs[self.ir.arg as usize] =
                                 u8::wrapping_add(self.regs[self.ir.arg as usize], self.ir.arg2);
                             //已经溢出
+                            let x: u8 = self.regs[self.ir.arg as usize].clone();
+                            if x == 0 {
+                                self.flags[0] = 0;
+                            }
+                            if x > 0 {
+                                self.flags[0] = 1;
+                            }
+                            if x < (0 as u8) {
+                                self.flags[0] = 2;
+                            }
                         }
                     }
                 }
@@ -91,12 +114,31 @@ impl Cpu {
                     ) {
                         Some(x) => {
                             self.regs[self.ir.arg as usize] = x;
+                            if x == 0 {
+                                self.flags[0] = 0;
+                            }
+                            if x > 0 {
+                                self.flags[0] = 1;
+                            }
+                            if x < (0 as u8) {
+                                self.flags[0] = 2;
+                            }
                         }
                         None => {
                             self.regs[self.ir.arg as usize] = u8::wrapping_add(
                                 self.regs[self.ir.arg as usize],
                                 self.regs[self.ir.arg2 as usize],
                             );
+                            let x = self.regs[self.ir.arg as usize].clone(); //这里赋值是为了方便复制粘贴
+                            if x == 0 {
+                                self.flags[0] = 0;
+                            }
+                            if x > 0 {
+                                self.flags[0] = 1;
+                            }
+                            if x < (0 as u8) {
+                                self.flags[0] = 2;
+                            }
                         }
                     }
                 }
@@ -108,12 +150,31 @@ impl Cpu {
                     ) {
                         Some(x) => {
                             self.regs[self.ir.arg as usize] = x;
+                            if x == 0 {
+                                self.flags[0] = 0;
+                            }
+                            if x > 0 {
+                                self.flags[0] = 1;
+                            }
+                            if x < (0 as u8) {
+                                self.flags[0] = 2;
+                            }
                         }
                         None => {
                             self.regs[self.ir.arg as usize] = u8::wrapping_sub(
                                 self.regs[self.ir.arg as usize],
                                 self.regs[self.ir.arg2 as usize],
                             );
+                            let x = self.regs[self.ir.arg as usize].clone();
+                            if x == 0 {
+                                self.flags[0] = 0;
+                            }
+                            if x > 0 {
+                                self.flags[0] = 1;
+                            }
+                            if x < (0 as u8) {
+                                self.flags[0] = 2;
+                            }
                         }
                     }
                 }
@@ -125,12 +186,31 @@ impl Cpu {
                     ) {
                         Some(x) => {
                             self.regs[self.ir.arg as usize] = x;
+                            if x == 0 {
+                                self.flags[0] = 0;
+                            }
+                            if x > 0 {
+                                self.flags[0] = 1;
+                            }
+                            if x < (0 as u8) {
+                                self.flags[0] = 2;
+                            }
                         }
                         None => {
                             self.regs[self.ir.arg as usize] = u8::wrapping_mul(
                                 self.regs[self.ir.arg as usize],
                                 self.regs[self.ir.arg2 as usize],
                             );
+                            let x = self.regs[self.ir.arg as usize].clone();
+                            if x == 0 {
+                                self.flags[0] = 0;
+                            }
+                            if x > 0 {
+                                self.flags[0] = 1;
+                            }
+                            if x < (0 as u8) {
+                                self.flags[0] = 2;
+                            }
                         }
                     }
                 }
@@ -142,12 +222,31 @@ impl Cpu {
                     ) {
                         Some(x) => {
                             self.regs[self.ir.arg as usize] = x;
+                            if x == 0 {
+                                self.flags[0] = 0;
+                            }
+                            if x > 0 {
+                                self.flags[0] = 1;
+                            }
+                            if x < (0 as u8) {
+                                self.flags[0] = 2;
+                            }
                         }
                         None => {
                             self.regs[self.ir.arg as usize] = u8::wrapping_div(
                                 self.regs[self.ir.arg as usize],
                                 self.regs[self.ir.arg2 as usize],
                             );
+                            let x = self.regs[self.ir.arg as usize].clone();
+                            if x == 0 {
+                                self.flags[0] = 0;
+                            }
+                            if x > 0 {
+                                self.flags[0] = 1;
+                            }
+                            if x < (0 as u8) {
+                                self.flags[0] = 2;
+                            }
                         }
                     }
                 }
@@ -173,19 +272,21 @@ impl Cpu {
                 }
                 0x10 => {
                     //写入内存
+
                 }
                 0x11 => {
                     //读内存
                 }
                 0x12 => {
                     //调用
+                    
                 }
                 0x13 => {
                     //返回
                 }
                 _ => {
                     //MCODE：这什么鬼指令？？？
-                    println!("unknown instruction:{:#?}", self.ir);
+                    println!("unknown instruction:{:#?},PC:{:#?}", self.ir,self.pc);
                 }
             }
         }
@@ -195,7 +296,7 @@ impl Cpu {
     pub fn print_debug_info(self: &mut Cpu) {
         println!("PC:{} ", self.pc);
         println!("instruction reg:{:#?}", self.ir);
-        println!("SP:{}", self.sp);
+        println!("SP:{}", self.stack_top);
         println!("mem:{:?}", self.mem);
         println!("regs:{:?}", self.regs);
         println!("flags:{:?}", self.flags);
